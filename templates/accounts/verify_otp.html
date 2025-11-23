@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Verify OTP{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Verify Account</h1>
+    <p>We sent a 6-digit code to <strong>{{ mobile }}</strong></p>
+    <p style="font-size: 12px; color: #9ca3af; background: #f3f4f6; display: inline-block; padding: 4px 8px; border-radius: 4px;">Dev: Check console for OTP</p>
+    
+    <form id="otp-form" style="margin-top: 20px;">
+        {% csrf_token %}
+        <input type="hidden" name="mobile" value="{{ mobile }}">
+        
+        <div class="form-group">
+            <label for="otp">Enter Verification Code</label>
+            <input type="text" id="otp" name="otp" placeholder="000000" required maxlength="6" style="letter-spacing: 4px; font-size: 20px; text-align: center;">
+            <div class="error-text" id="otp-error"></div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block" id="verify-btn">
+            Verify & Login
+        </button>
+    </form>
+</div>
+
+<div style="text-align: center;">
+    <a href="{% url 'mobile_login' %}" class="link-back">
+        Change Mobile Number
+    </a>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Auto-focus OTP field
+    $('#otp').focus();
+
+    $('#otp-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const otp = $('#otp').val().trim();
+        const mobile = $('[name=mobile]').val();
+        $('#otp-error').text('');
+        
+        if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+            $('#otp-error').html('<i class="fa-solid fa-circle-exclamation"></i> Invalid code format');
+            return;
+        }
+        
+        const btn = $('#verify-btn');
+        const originalText = btn.html();
+        btn.prop('disabled', true).text('Verifying...');
+        
+        $.ajax({
+            url: '{% url "verify_otp" %}',
+            method: 'POST',
+            data: {
+                mobile: mobile,
+                otp: otp,
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect;
+                } else {
+                    $('#otp-error').html('<i class="fa-solid fa-circle-exclamation"></i> ' + response.message);
+                    btn.prop('disabled', false).html(originalText);
+                }
+            },
+            error: function() {
+                $('#otp-error').text('An error occurred. Please try again.');
+                btn.prop('disabled', false).html(originalText);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

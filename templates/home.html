@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Career Launchpad{% endblock %}
+
+{% block content %}
+<div class="hero" style="text-align: center; margin-bottom: 30px;">
+    <h1 style="margin-bottom: 8px;">Launch Your Career</h1>
+    <p style="font-size: 16px;">Master new skills and connect with top employers.</p>
+</div>
+
+<div class="card">
+    <h2>Get Started</h2>
+    <p>Create your profile to access exclusive training.</p>
+    
+    <div class="auth-options">
+        <a href="{% url 'mobile_login' %}" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-mobile-screen"></i> Sign in with Mobile
+        </a>
+        <a href="{% url 'account_login' %}" class="btn btn-secondary btn-block">
+            <i class="fab fa-google"></i> Sign in with Google
+        </a>
+    </div>
+</div>
+
+<div class="card" style="border: none; box-shadow: none; background: transparent; padding: 0;">
+    <h3 style="font-size: 16px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-size: 12px; font-weight: 700;">Why Join Us?</h3>
+    
+    <div class="features-grid">
+        <div class="feature-item">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Free industry-standard training</span>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>Direct job placement assistance</span>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-certificate"></i>
+            <span>Verified skill certifications</span>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-building"></i>
+            <span>Network with top companies</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
