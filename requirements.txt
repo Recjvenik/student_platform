@@ -7,5 +7,6 @@ sqlparse==0.5.3
 requests==2.32.5
 cryptography==46.0.3
 PyJWT==2.10.1
-python-decouple
-psycopg2
+python-decouple==3.8
+psycopg2==2.9.11
+gunicorn==23.0.0
