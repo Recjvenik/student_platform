@@ -5,10 +5,135 @@ from django.views.decorators.http import require_http_methods
 from django.utils import timezone
 from .models import StudentProfile, Experience
 import json
+from .forms import (
+    Step1BasicInfoForm, Step2EducationForm, Step3SkillsForm,
+    Step4CareerForm, Step5AvailabilityForm, Step6BehaviouralForm,
+    Step7TrainingForm, Step8DocumentsForm
+)
+
+from django.contrib import messages
+
+@login_required
+def profile_step(request, step):
+    """Display and handle individual profile steps"""
+    
+    step = int(step)
+    if step < 1 or step > 8:
+        return redirect('profile_start')
+    
+    profile = get_object_or_404(StudentProfile, user=request.user)
+    
+    # Prevent skipping steps
+    if step > profile.step_completed + 1:
+        messages.warning(request, 'Please complete the previous steps first.')
+        return redirect('profile_step', step=profile.step_completed + 1)
+    
+    # Get the appropriate form class
+    form_classes = {
+        1: Step1BasicInfoForm,
+        2: Step2EducationForm,
+        3: Step3SkillsForm,
+        4: Step4CareerForm,
+        5: Step5AvailabilityForm,
+        6: Step6BehaviouralForm,
+        7: Step7TrainingForm,
+        8: Step8DocumentsForm,
+    }
+    
+    form_class = form_classes.get(step)
+    
+    if request.method == 'POST':
+        form = form_class(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            # Save the form
+            form.save()
+            
+            # Update step completed
+            if step > profile.step_completed:
+                profile.step_completed = step
+                profile.save()
+            
+            # If it's the last step, mark as complete
+            if step == 8:
+                profile.is_complete = True
+                profile.submitted_at = timezone.now()
+                profile.save()
+                messages.success(request, 'Profile completed successfully!')
+                return redirect('profile_complete')
+            
+            # Redirect to next step
+            messages.success(request, 'Step saved successfully!')
+            print('jjjjjj')
+            return redirect('profile_step', step=step + 1)
+        else:
+            # Form has validation errors
+            # Errors will be displayed in the template
+            pass
+    else:
+        # GET request - display the form
+        form = form_class(instance=profile)
+    
+    years = list(range(2018, 2029))
+    
+    # Get experiences for step 2
+    experiences = []
+    if step == 2:
+        experiences = profile.experiences.all()
+    
+    context = {
+        'step': step,
+        'profile': profile,
+        'form': form,
+        'total_steps': 8,
+        'years': years,
+        'experiences': experiences,
+        'today': timezone.now().date(),
+    }
+    
+    # Get template based on step
+    template_map = {
+        1: 'students/step1_basic.html',
+        2: 'students/step2_education.html',
+        3: 'students/step3_skills.html',
+        4: 'students/step4_career.html',
+        5: 'students/step5_availability.html',
+        6: 'students/step6_behavioural.html',
+        7: 'students/step7_training.html',
+        8: 'students/step8_documents.html',
+    }
+    
+    return render(request, template_map.get(step), context)
 
 
 @login_required
+def profile_complete(request):
+    """Display profile completion page"""
+    profile = get_object_or_404(StudentProfile, user=request.user)
+    
+    if not profile.is_complete:
+        return redirect('profile_step', step=profile.step_completed + 1)
+    
+    return render(request, 'students/profile_complete.html', {'profile': profile})
+
+
+@login_required  
 def profile_start(request):
+    """Start or resume profile creation"""
+    profile, created = StudentProfile.objects.get_or_create(user=request.user)
+    
+    # If profile is complete, redirect to dashboard or complete page
+    if profile.is_complete:
+        return redirect('profile_complete')
+    
+    # Redirect to the next incomplete step
+    next_step = profile.step_completed + 1 if profile.step_completed < 8 else 1
+    return redirect('profile_step', step=next_step)
+
+
+
+
+@login_required
+def profile_start1(request):
     """Start or continue profile registration"""
     
     profile, created = StudentProfile.objects.get_or_create(
@@ -32,7 +157,7 @@ def profile_start(request):
 
 
 @login_required
-def profile_step(request, step):
+def profile_step1(request, step):
     """Display and handle individual profile steps"""
     
     step = int(step)
@@ -44,11 +169,12 @@ def profile_step(request, step):
     # Prevent skipping steps
     if step > profile.step_completed + 1:
         return redirect('profile_step', step=profile.step_completed + 1)
-    
+    years = list(range(2018, 2029))
     context = {
         'step': step,
         'profile': profile,
         'total_steps': 8,
+        'years': years
     }
     
     # Get template based on step
@@ -63,12 +189,13 @@ def profile_step(request, step):
         8: 'students/step8_documents.html',
     }
     
+
     return render(request, template_map.get(step), context)
 
 
 @login_required
 @require_http_methods(["POST"])
-def save_step(request):
+def save_step1(request):
     """AJAX endpoint to save step data"""
     
     try:

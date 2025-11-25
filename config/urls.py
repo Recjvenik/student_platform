@@ -7,12 +7,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import HomeView
 
+# Dashboard URL at root level
+from django.urls import path
+from students.views import dashboard
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
     path('accounts/', include('allauth.urls')),
     path('', include('accounts.urls')),
     path('profile/', include('students.urls')),
+    path('dashboard/', dashboard, name='dashboard'),
 ]
 
 # Serve media files in development

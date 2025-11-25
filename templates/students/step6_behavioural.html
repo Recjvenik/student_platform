@@ -1,0 +1,252 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-users{% endblock %}
+{% block step_title %}Behavioural Assessment{% endblock %}
+{% block step_description %}Help us understand your work style and preferences{% endblock %}
+
+{% block form_content %}
+<div class="form-group">
+    <label class="required">Rate Your Comfort Level (1-5)</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        1 = Very Uncomfortable, 5 = Very Comfortable
+    </p>
+    
+    <div style="margin-bottom: var(--space-4);">
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">
+            <i class="fa-solid fa-user-group"></i> Talking to strangers or new people
+        </label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="comfort_talking_strangers" value="{{ i }}" id="talking_{{ i }}" 
+                   {% if form.comfort_talking_strangers.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="talking_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.comfort_talking_strangers.errors %}
+            <span class="error-message">{{ form.comfort_talking_strangers.errors.0 }}</span>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: var(--space-4);">
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">
+            <i class="fa-solid fa-face-angry"></i> Handling angry or difficult customers
+        </label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="comfort_handling_angry_customers" value="{{ i }}" id="angry_{{ i }}" 
+                   {% if form.comfort_handling_angry_customers.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="angry_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.comfort_handling_angry_customers.errors %}
+            <span class="error-message">{{ form.comfort_handling_angry_customers.errors.0 }}</span>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: var(--space-4);">
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">
+            <i class="fa-solid fa-database"></i> Working with data and spreadsheets
+        </label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="comfort_working_with_data" value="{{ i }}" id="data_{{ i }}" 
+                   {% if form.comfort_working_with_data.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="data_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.comfort_working_with_data.errors %}
+            <span class="error-message">{{ form.comfort_working_with_data.errors.0 }}</span>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: var(--space-4);">
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">
+            <i class="fa-solid fa-bullseye"></i> Following targets and deadlines
+        </label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="comfort_following_targets" value="{{ i }}" id="target_{{ i }}" 
+                   {% if form.comfort_following_targets.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="target_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.comfort_following_targets.errors %}
+            <span class="error-message">{{ form.comfort_following_targets.errors.0 }}</span>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">
+            <i class="fa-solid fa-envelope"></i> Writing emails and formal communication
+        </label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="comfort_writing_emails" value="{{ i }}" id="email_{{ i }}" 
+                   {% if form.comfort_writing_emails.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="email_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.comfort_writing_emails.errors %}
+            <span class="error-message">{{ form.comfort_writing_emails.errors.0 }}</span>
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="required">Work Style Preference</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Which describes you better?
+    </p>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="people_oriented" name="people_vs_task_oriented" value="people" 
+                   {% if form.people_vs_task_oriented.value == 'people' %}checked{% endif %} required>
+            <label for="people_oriented">
+                <i class="fa-solid fa-users"></i>
+                <div>
+                    <strong>People-Oriented</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">I enjoy working with people and teams</div>
+                </div>
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="task_oriented" name="people_vs_task_oriented" value="task" 
+                   {% if form.people_vs_task_oriented.value == 'task' %}checked{% endif %}>
+            <label for="task_oriented">
+                <i class="fa-solid fa-list-check"></i>
+                <div>
+                    <strong>Task-Oriented</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">I prefer focusing on individual tasks</div>
+                </div>
+            </label>
+        </div>
+    </div>
+    {% if form.people_vs_task_oriented.errors %}
+        <span class="error-message">{{ form.people_vs_task_oriented.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label class="required">Work Environment Preference</label>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="prefer_office" name="office_vs_remote" value="office" 
+                   {% if form.office_vs_remote.value == 'office' %}checked{% endif %} required>
+            <label for="prefer_office">
+                <i class="fa-solid fa-building"></i>
+                <div>
+                    <strong>Office Environment</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">I work better in an office setting</div>
+                </div>
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="prefer_remote" name="office_vs_remote" value="remote" 
+                   {% if form.office_vs_remote.value == 'remote' %}checked{% endif %}>
+            <label for="prefer_remote">
+                <i class="fa-solid fa-house"></i>
+                <div>
+                    <strong>Remote/Home</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">I prefer working from home</div>
+                </div>
+            </label>
+        </div>
+    </div>
+    {% if form.office_vs_remote.errors %}
+        <span class="error-message">{{ form.office_vs_remote.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label class="required">Strength: Analysis vs Communication</label>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="analysis_strong" name="analysis_vs_communication" value="analysis" 
+                   {% if form.analysis_vs_communication.value == 'analysis' %}checked{% endif %} required>
+            <label for="analysis_strong">
+                <i class="fa-solid fa-chart-line"></i>
+                <div>
+                    <strong>Analytical</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">I'm better at analysis and problem-solving</div>
+                </div>
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="communication_strong" name="analysis_vs_communication" value="communication" 
+                   {% if form.analysis_vs_communication.value == 'communication' %}checked{% endif %}>
+            <label for="communication_strong">
+                <i class="fa-solid fa-comments"></i>
+                <div>
+                    <strong>Communicator</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">I'm better at communication and interaction</div>
+                </div>
+            </label>
+        </div>
+    </div>
+    {% if form.analysis_vs_communication.errors %}
+        <span class="error-message">{{ form.analysis_vs_communication.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label>Career Concerns (if any)</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select any concerns you have about starting your career
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="concern_lack_of_experience" name="concern_lack_of_experience" 
+                   {% if form.concern_lack_of_experience.value %}checked{% endif %}>
+            <label for="concern_lack_of_experience">
+                <i class="fa-solid fa-briefcase"></i> Lack of work experience
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="concern_lack_of_skills" name="concern_lack_of_skills" 
+                   {% if form.concern_lack_of_skills.value %}checked{% endif %}>
+            <label for="concern_lack_of_skills">
+                <i class="fa-solid fa-wrench"></i> Need to develop more skills
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="concern_low_confidence" name="concern_low_confidence" 
+                   {% if form.concern_low_confidence.value %}checked{% endif %}>
+            <label for="concern_low_confidence">
+                <i class="fa-solid fa-face-frown"></i> Low confidence
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="concern_career_direction" name="concern_career_direction" 
+                   {% if form.concern_career_direction.value %}checked{% endif %}>
+            <label for="concern_career_direction">
+                <i class="fa-solid fa-compass"></i> Unclear about career direction
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="career_goal_3_years" class="required">Your Career Goal (3 Years)</label>
+    <textarea 
+        id="career_goal_3_years" 
+        name="career_goal_3_years"
+        rows="4"
+        placeholder="Where do you see yourself in 3 years? What position or role would you like to achieve?"
+        required
+    >{{ form.career_goal_3_years.value|default:'' }}</textarea>
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        Be specific about your aspirations
+    </p>
+    {% if form.career_goal_3_years.errors %}
+        <span class="error-message">{{ form.career_goal_3_years.errors.0 }}</span>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Optional: Add any UI interactions here
+});
+</script>
+{% endblock %}

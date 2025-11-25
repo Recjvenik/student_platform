@@ -1,0 +1,129 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-clock{% endblock %}
+{% block step_title %}Availability & Setup{% endblock %}
+{% block step_description %}Tell us about your training availability{% endblock %}
+
+{% block form_content %}
+<div class="form-group">
+    <label for="time_for_training" class="required">Time Available for Training</label>
+    <select id="time_for_training" name="time_for_training" required>
+        <option value="">Select your availability</option>
+        <option value="full_time" {% if form.time_for_training.value == 'full_time' %}selected{% endif %}>⏰ Full Time (6-8 hours/day)</option>
+        <option value="part_time" {% if form.time_for_training.value == 'part_time' %}selected{% endif %}>🕐 Part Time (3-4 hours/day)</option>
+        <option value="weekends" {% if form.time_for_training.value == 'weekends' %}selected{% endif %}>📅 Weekends Only</option>
+    </select>
+    {% if form.time_for_training.errors %}
+        <span class="error-message">{{ form.time_for_training.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label class="required">Preferred Time Slots</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select when you're most available (select at least one)
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="slot_morning" name="slot_morning" 
+                   {% if form.slot_morning.value %}checked{% endif %}>
+            <label for="slot_morning">
+                <i class="fa-solid fa-sunrise"></i> Morning (6 AM - 12 PM)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="slot_afternoon" name="slot_afternoon" 
+                   {% if form.slot_afternoon.value %}checked{% endif %}>
+            <label for="slot_afternoon">
+                <i class="fa-solid fa-sun"></i> Afternoon (12 PM - 5 PM)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="slot_evening" name="slot_evening" 
+                   {% if form.slot_evening.value %}checked{% endif %}>
+            <label for="slot_evening">
+                <i class="fa-solid fa-cloud-sun"></i> Evening (5 PM - 9 PM)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="slot_night" name="slot_night" 
+                   {% if form.slot_night.value %}checked{% endif %}>
+            <label for="slot_night">
+                <i class="fa-solid fa-moon"></i> Night (9 PM - 12 AM)
+            </label>
+        </div>
+    </div>
+    {% if form.errors %}
+        {% for field, errors in form.errors.items %}
+            {% if 'slot_' in field or field == '__all__' %}
+                <span class="error-message">Please select at least one preferred time slot</span>
+                {% break %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="internet_quality" class="required">Internet Quality at Home</label>
+    <select id="internet_quality" name="internet_quality" required>
+        <option value="">Select your internet quality</option>
+        <option value="excellent" {% if form.internet_quality.value == 'excellent' %}selected{% endif %}>🚀 Excellent (Fiber/4G with stable connection)</option>
+        <option value="good" {% if form.internet_quality.value == 'good' %}selected{% endif %}>✅ Good (Broadband/4G with occasional issues)</option>
+        <option value="average" {% if form.internet_quality.value == 'average' %}selected{% endif %}>⚠️ Average (3G/4G with frequent issues)</option>
+        <option value="poor" {% if form.internet_quality.value == 'poor' %}selected{% endif %}>❌ Poor (Slow or unreliable connection)</option>
+    </select>
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        <i class="fa-solid fa-info-circle"></i> Good internet is required for online training sessions
+    </p>
+    {% if form.internet_quality.errors %}
+        <span class="error-message">{{ form.internet_quality.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label class="required">Device Access</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select all devices you have access to
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="has_mobile_access" name="has_mobile_access" 
+                   {% if form.has_mobile_access.value %}checked{% endif %}>
+            <label for="has_mobile_access">
+                <i class="fa-solid fa-mobile-screen"></i> Smartphone
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="has_laptop_access" name="has_laptop_access" 
+                   {% if form.has_laptop_access.value %}checked{% endif %}>
+            <label for="has_laptop_access">
+                <i class="fa-solid fa-laptop"></i> Laptop / Desktop Computer
+            </label>
+        </div>
+    </div>
+    {% if form.has_mobile_access.errors or form.has_laptop_access.errors %}
+        <span class="error-message">Please select at least one device</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="constraints">Any Constraints or Special Requirements?</label>
+    <textarea 
+        id="constraints" 
+        name="constraints"
+        rows="4"
+        placeholder="Share any time constraints, health issues, or special requirements that might affect your training (optional)"
+    >{{ form.constraints.value|default:'' }}</textarea>
+    {% if form.constraints.errors %}
+        <span class="error-message">{{ form.constraints.errors.0 }}</span>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Optional: Add any UI interactions here
+});
+</script>
+{% endblock %}

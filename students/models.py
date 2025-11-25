@@ -13,20 +13,20 @@ class StudentProfile(models.Model):
     gender = models.CharField(max_length=20, choices=[
         ('male', 'Male'), ('female', 'Female'), ('other', 'Other'), ('prefer_not_to_say', 'Prefer not to say')
     ])
-    date_of_birth = models.DateField()
-    current_city = models.CharField(max_length=100)
-    current_state = models.CharField(max_length=100)
-    preferred_languages = models.JSONField(default=list, help_text='List of preferred languages')
+    date_of_birth = models.DateField(default=None, blank=True, null=True)
+    current_city = models.CharField(max_length=100, blank=True, null=True)
+    current_state = models.CharField(max_length=100, blank=True, null=True)
+    preferred_languages = models.JSONField(default=list, help_text='List of preferred languages', blank=True, null=True)
     
     # SECTION B - Education Details
     current_status = models.CharField(max_length=50, choices=[
         ('student', 'Student'), ('graduate', 'Graduate'), ('postgraduate', 'Postgraduate')
-    ])
-    highest_qualification = models.CharField(max_length=100)
-    stream_specialization = models.CharField(max_length=100)
-    college_name = models.CharField(max_length=255)
-    university = models.CharField(max_length=255)
-    graduation_year = models.IntegerField()
+    ], blank=True, null=True)
+    highest_qualification = models.CharField(max_length=100, blank=True, null=True)
+    stream_specialization = models.CharField(max_length=100, blank=True, null=True)
+    college_name = models.CharField(max_length=255, blank=True, null=True)
+    university = models.CharField(max_length=255, blank=True, null=True)
+    graduation_year = models.IntegerField(blank=True, null=True )
     academic_scores = models.CharField(max_length=50, help_text='CGPA/Percentage')
     has_backlogs = models.BooleanField(default=False)
     num_backlogs = models.IntegerField(default=0)
@@ -44,7 +44,7 @@ class StudentProfile(models.Model):
     preferred_industries = models.JSONField(default=list, help_text='List of preferred industries')
     work_type = models.CharField(max_length=20, choices=[
         ('remote', 'Remote'), ('office', 'Office'), ('hybrid', 'Hybrid'), ('any', 'Any')
-    ])
+    ], blank=True, null=True)
     preferred_locations = models.JSONField(default=list, help_text='List of preferred work locations')
     willing_to_relocate = models.BooleanField(default=False)
     expected_salary = models.CharField(max_length=50)
@@ -71,13 +71,13 @@ class StudentProfile(models.Model):
     # Binary behavioral preferences
     people_vs_task_oriented = models.CharField(max_length=20, choices=[
         ('people', 'People-oriented'), ('task', 'Task-oriented')
-    ])
+    ], blank=True, null=True)
     office_vs_remote = models.CharField(max_length=20, choices=[
         ('office', 'Office'), ('remote', 'Remote')
-    ])
+    ], blank=True, null=True)
     analysis_vs_communication = models.CharField(max_length=20, choices=[
         ('analysis', 'Analysis'), ('communication', 'Communication')
-    ])
+    ], blank=True, null=True)
     
     career_concerns = models.JSONField(default=list, help_text='List of career concerns')
     career_goal_3_years = models.TextField(help_text='Career goal in 3 years (3-4 lines)')

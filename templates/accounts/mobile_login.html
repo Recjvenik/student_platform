@@ -1,21 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}Mobile Login{% endblock %}
+{% block title %}Mobile Sign In{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h1>Welcome Back</h1>
-    <p>Enter your mobile number to receive a verification code.</p>
+<div class="card fade-in">
+    <div class="card-header">
+        <div style="width: 60px; height: 60px; margin: 0 auto var(--space-4); background: linear-gradient(135deg, var(--primary-light), var(--primary-light)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-mobile-screen" style="font-size: 1.75rem; color: var(--primary);"></i>
+        </div>
+        <h1>Welcome Back</h1>
+        <p>Enter your mobile number to receive a verification code</p>
+    </div>
     
     <form id="mobile-form">
         {% csrf_token %}
+        
         <div class="form-group">
-            <label for="mobile">Mobile Number</label>
-            <input type="tel" id="mobile" name="mobile" placeholder="e.g. 9876543210" required maxlength="10" autocomplete="tel">
-            <div class="error-text" id="mobile-error"></div>
+            <label for="mobile" class="required">Mobile Number</label>
+            <div style="position: relative;">
+                <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 600;">+91</span>
+                <input 
+                    type="tel" 
+                    id="mobile" 
+                    name="mobile" 
+                    placeholder="9876543210" 
+                    required 
+                    maxlength="10" 
+                    autocomplete="tel"
+                    pattern="[6-9][0-9]{9}"
+                    style="padding-left: 3.5rem;"
+                >
+            </div>
+            <div class="error-text" id="mobile-error" style="display: none;"></div>
+            <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+                <i class="fa-solid fa-shield-halved"></i> We'll send you a 6-digit verification code
+            </p>
         </div>
         
-        <button type="submit" class="btn btn-primary btn-block" id="send-otp-btn">
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="send-otp-btn">
             Send Verification Code
         </button>
     </form>
@@ -29,22 +51,42 @@
 
 <script>
 $(document).ready(function() {
-    $('#mobile-form').on('submit', function(e) {
+    const $form = $('#mobile-form');
+    const $mobile = $('#mobile');
+    const $error = $('#mobile-error');
+    const $btn = $('#send-otp-btn');
+    
+    // Auto-format mobile number as user types
+    $mobile.on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        $error.hide().text('');
+    });
+    
+    // Form submission
+    $form.on('submit', function(e) {
         e.preventDefault();
         
-        const mobile = $('#mobile').val().trim();
-        $('#mobile-error').text('');
+        const mobile = $mobile.val().trim();
+        $error.hide().text('');
         
-        // More robust validation regex
-        if (mobile.length !== 10 || !/^[6-9]\d{9}$/.test(mobile)) {
-            $('#mobile-error').html('<i class="fa-solid fa-circle-exclamation"></i> Please enter a valid 10-digit mobile number');
+        // Validation
+        if (mobile.length !== 10) {
+            $error.html('<i class="fa-solid fa-circle-exclamation"></i> Mobile number must be 10 digits').show();
+            $mobile.focus();
             return;
         }
         
-        const btn = $('#send-otp-btn');
-        const originalText = btn.html();
-        btn.prop('disabled', true).html('<div class="spinner"></div>');
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+            $error.html('<i class="fa-solid fa-circle-exclamation"></i> Please enter a valid Indian mobile number').show();
+            $mobile.focus();
+            return;
+        }
         
+        // Disable button and show loading
+        const originalHtml = $btn.html();
+        $btn.prop('disabled', true).html('<div class="spinner"></div> Sending...');
+        
+        // Submit via AJAX
         $.ajax({
             url: '{% url "mobile_login" %}',
             method: 'POST',
@@ -54,15 +96,18 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.success) {
+                    // Success - redirect to OTP page
                     window.location.href = '/verify-otp/?mobile=' + mobile;
                 } else {
-                    $('#mobile-error').html('<i class="fa-solid fa-circle-exclamation"></i> ' + response.message);
-                    btn.prop('disabled', false).html(originalText);
+                    // Show error
+                    $error.html('<i class="fa-solid fa-circle-exclamation"></i> ' + (response.message || 'Failed to send code')).show();
+                    $btn.prop('disabled', false).html(originalHtml);
                 }
             },
-            error: function() {
-                $('#mobile-error').text('Connection error. Please try again.');
-                btn.prop('disabled', false).html(originalText);
+            error: function(xhr) {
+                const response = xhr.responseJSON || {};
+                $error.html('<i class="fa-solid fa-circle-exclamation"></i> ' + (response.message || 'Connection error. Please try again')).show();
+                $btn.prop('disabled', false).html(originalHtml);
             }
         });
     });

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {{ profile.full_name }}{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="card fade-in" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none;">
+    <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fa-solid fa-user" style="font-size: 1.75rem;"></i>
+        </div>
+        <div style="flex: 1;">
+            <h1 style="color: white; margin-bottom: var(--space-1); font-size: 1.5rem;">Welcome back, {{ profile.full_name }}!</h1>
+            <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 0; font-size: 0.9375rem;">Your profile is being reviewed</p>
+        </div>
+    </div>
+</div>
+
+<!-- Status Card -->
+<div class="card fade-in" style="animation-delay: 0.1s;">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-5);">
+        <div style="width: 48px; height: 48px; background: {% if profile.is_complete %}var(--success){% else %}var(--warning){% endif %}; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fa-solid {% if profile.is_complete %}fa-check-circle{% else %}fa-clock{% endif %}" style="font-size: 1.5rem; color: white;"></i>
+        </div>
+        <div>
+            <h3 style="margin-bottom: var(--space-1); font-size: 1.125rem;">
+                {% if profile.is_complete %}Profile Complete{% else %}Profile In Review{% endif %}
+            </h3>
+            <p style="color: var(--text-muted); margin-bottom: 0; font-size: 0.875rem;">
+                Submitted on {{ profile.submitted_at|date:"F d, Y" }}
+            </p>
+        </div>
+    </div>
+    
+    <!-- Profile Summary -->
+    <div class="review-section">
+        <h3>Profile Summary</h3>
+        
+        <div class="review-item">
+            <span class="review-label"><i class="fa-solid fa-envelope"></i> Email</span>
+            <span class="review-value">{{ user.email|default:"Not provided" }}</span>
+        </div>
+        
+        <div class="review-item">
+            <span class="review-label"><i class="fa-solid fa-phone"></i> Mobile</span>
+            <span class="review-value">{{ user.mobile|default:"Not provided" }}</span>
+        </div>
+        
+        <div class="review-item">
+            <span class="review-label"><i class="fa-solid fa-school"></i> College</span>
+            <span class="review-value">{{ profile.college_name }}</span>
+        </div>
+        
+        <div class="review-item">
+            <span class="review-label"><i class="fa-solid fa-graduation-cap"></i> Graduation</span>
+            <span class="review-value">{{ profile.graduation_year }}</span>
+        </div>
+        
+        <div class="review-item">
+            <span class="review-label"><i class="fa-solid fa-map-marker-alt"></i> Location</span>
+            <span class="review-value">{{ profile.current_city }}, {{ profile.current_state }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Next Steps Card -->
+<div class="card fade-in" style="animation-delay: 0.2s; background: var(--primary-light); border-color: var(--primary);">
+    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+        <div style="width: 40px; height: 40px; background: var(--primary); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fa-solid fa-lightbulb" style="font-size: 1.125rem; color: white;"></i>
+        </div>
+        <div style="flex: 1;">
+            <h3 style="font-size: 1.125rem; margin-bottom: var(--space-3); color: var(--primary);">What's Next?</h3>
+            <p style="color: var(--text-primary); margin-bottom: var(--space-3);">
+                Our team is reviewing your profile. You'll receive updates within 2-3 business days about:
+            </p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: var(--space-2) 0; display: flex; align-items: center; gap: var(--space-2); color: var(--text-primary);">
+                    <i class="fa-solid fa-check-circle" style="color: var(--success);"></i>
+                    <span>Training program enrollment</span>
+                </li>
+                <li style="padding: var(--space-2) 0; display: flex; align-items: center; gap: var(--space-2); color: var(--text-primary);">
+                    <i class="fa-solid fa-check-circle" style="color: var(--success);"></i>
+                    <span>Course schedule and materials</span>
+                </li>
+                <li style="padding: var(--space-2) 0; display: flex; align-items: center; gap: var(--space-2); color: var(--text-primary);">
+                    <i class="fa-solid fa-check-circle" style="color: var(--success);"></i>
+                    <span>Job opportunities matching your profile</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div style="display: flex; gap: var(--space-3);">
+    <a href="{% url 'profile_step' step=1 %}" class="btn btn-secondary" style="flex: 1;">
+        <i class="fa-solid fa-edit"></i>
+        Edit Profile
+    </a>
+    <button class="btn btn-outline" style="flex: 1;" onclick="window.print()">
+        <i class="fa-solid fa-download"></i>
+        Download
+    </button>
+</div>
+
+<!-- Help Section -->
+<div style="text-align: center; padding: var(--space-6) var(--space-4); background: var(--gray-50); border-radius: var(--radius-lg); margin-top: var(--space-6);">
+    <i class="fa-solid fa-headset" style="font-size: 2rem; color: var(--primary); margin-bottom: var(--space-2);"></i>
+    <h3 style="font-size: 1rem; margin-bottom: var(--space-2);">Need Help?</h3>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: var(--space-3);">
+        Our support team is here to assist you
+    </p>
+    <a href="mailto:support@careerlaunch.com" class="btn btn-ghost btn-sm">
+        <i class="fa-solid fa-envelope"></i>
+        Contact Support
+    </a>
+</div>
+{% endblock %}

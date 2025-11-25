@@ -1,0 +1,270 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-file-arrow-up{% endblock %}
+{% block step_title %}Document Upload{% endblock %}
+{% block step_description %}Upload your documents (optional, can be done later){% endblock %}
+
+{% block form_content %}
+<div style="background: var(--primary-light); padding: var(--space-4); border-radius: var(--radius-lg); border: 1px solid var(--primary); margin-bottom: var(--space-6);">
+    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+        <i class="fa-solid fa-info-circle" style="color: var(--primary); font-size: 1.25rem; flex-shrink: 0; margin-top: 2px;"></i>
+        <div>
+            <p style="color: var(--text-primary); margin-bottom: var(--space-2); font-weight: 500;">
+                Document Upload is Optional
+            </p>
+            <p style="color: var(--text-secondary); margin-bottom: 0; font-size: 0.875rem;">
+                You can skip this step and upload documents later from your dashboard. However, uploading now will speed up your profile verification.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="photo">Profile Photo</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Upload a clear passport-sized photo (JPG, PNG - Max 2MB)
+    </p>
+    {% if profile.photo %}
+    <div style="margin-bottom: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-3);">
+        <img src="{{ profile.photo.url }}" alt="Current photo" style="width: 60px; height: 60px; border-radius: var(--radius); object-fit: cover;">
+        <div style="flex: 1;">
+            <p style="margin: 0; font-size: 0.875rem; font-weight: 500;">Current Photo</p>
+            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">Upload a new one to replace</p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="file-upload">
+        <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/jpg">
+        <label for="photo" class="file-upload-label">
+            <i class="fa-solid fa-camera"></i>
+            <span>Click to upload photo</span>
+        </label>
+    </div>
+    <div id="photo-preview" style="display: none; margin-top: var(--space-3); text-align: center;">
+        <img id="photo-preview-img" style="max-width: 200px; border-radius: var(--radius-lg); box-shadow: var(--shadow);" alt="Preview">
+        <button type="button" class="btn btn-ghost btn-sm" style="margin-top: var(--space-2);" onclick="$('#photo').val(''); $('#photo-preview').hide();">
+            <i class="fa-solid fa-times"></i> Remove
+        </button>
+    </div>
+    {% if form.photo.errors %}
+        <span class="error-message">{{ form.photo.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="resume">Resume / CV</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Upload your latest resume in PDF format (Max 5MB)
+    </p>
+    {% if profile.resume %}
+    <div style="margin-bottom: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-3);">
+        <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem; color: var(--error);"></i>
+        <div style="flex: 1;">
+            <p style="margin: 0; font-size: 0.875rem; font-weight: 500;">Current Resume</p>
+            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">
+                <a href="{{ profile.resume.url }}" target="_blank" style="color: var(--primary);">View current file</a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="file-upload">
+        <input type="file" id="resume" name="resume" accept="application/pdf">
+        <label for="resume" class="file-upload-label">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>Click to upload resume</span>
+        </label>
+    </div>
+    <div id="resume-info" style="display: none; margin-top: var(--space-3);">
+        <div style="background: var(--success); color: white; padding: var(--space-3); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-2);">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span id="resume-name" style="flex: 1; font-size: 0.875rem;"></span>
+            <button type="button" style="background: none; border: none; color: white; cursor: pointer;" onclick="$('#resume').val(''); $('#resume-info').hide();">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% if form.resume.errors %}
+        <span class="error-message">{{ form.resume.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="id_proof">ID Proof (Aadhaar / PAN / Driving License)</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Upload a government-issued ID proof (JPG, PNG, PDF - Max 2MB)
+    </p>
+    {% if profile.id_proof %}
+    <div style="margin-bottom: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-3);">
+        <i class="fa-solid fa-id-card" style="font-size: 1.5rem; color: var(--primary);"></i>
+        <div style="flex: 1;">
+            <p style="margin: 0; font-size: 0.875rem; font-weight: 500;">Current ID Proof</p>
+            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">
+                <a href="{{ profile.id_proof.url }}" target="_blank" style="color: var(--primary);">View current file</a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="file-upload">
+        <input type="file" id="id_proof" name="id_proof" accept="image/jpeg,image/png,image/jpg,application/pdf">
+        <label for="id_proof" class="file-upload-label">
+            <i class="fa-solid fa-id-card"></i>
+            <span>Click to upload ID proof</span>
+        </label>
+    </div>
+    <div id="id-info" style="display: none; margin-top: var(--space-3);">
+        <div style="background: var(--success); color: white; padding: var(--space-3); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-2);">
+            <i class="fa-solid fa-id-card"></i>
+            <span id="id-name" style="flex: 1; font-size: 0.875rem;"></span>
+            <button type="button" style="background: none; border: none; color: white; cursor: pointer;" onclick="$('#id_proof').val(''); $('#id-info').hide();">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% if form.id_proof.errors %}
+        <span class="error-message">{{ form.id_proof.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="marksheet">Educational Certificates / Marksheets</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Upload your degree/diploma certificates (PDF - Max 5MB)
+    </p>
+    {% if profile.marksheet %}
+    <div style="margin-bottom: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-3);">
+        <i class="fa-solid fa-certificate" style="font-size: 1.5rem; color: var(--success);"></i>
+        <div style="flex: 1;">
+            <p style="margin: 0; font-size: 0.875rem; font-weight: 500;">Current Certificates</p>
+            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">
+                <a href="{{ profile.marksheet.url }}" target="_blank" style="color: var(--primary);">View current file</a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="file-upload">
+        <input type="file" id="marksheet" name="marksheet" accept="application/pdf">
+        <label for="marksheet" class="file-upload-label">
+            <i class="fa-solid fa-file-certificate"></i>
+            <span>Click to upload certificates</span>
+        </label>
+    </div>
+    <div id="cert-info" style="display: none; margin-top: var(--space-3);">
+        <div style="background: var(--success); color: white; padding: var(--space-3); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-2);">
+            <i class="fa-solid fa-certificate"></i>
+            <span id="cert-name" style="flex: 1; font-size: 0.875rem;"></span>
+            <button type="button" style="background: none; border: none; color: white; cursor: pointer;" onclick="$('#marksheet').val(''); $('#cert-info').hide();">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% if form.marksheet.errors %}
+        <span class="error-message">{{ form.marksheet.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div style="background: var(--gray-50); padding: var(--space-4); border-radius: var(--radius-lg); border: 1px solid var(--border); margin-top: var(--space-6);">
+    <h3 style="font-size: 0.9375rem; margin-bottom: var(--space-3); color: var(--text-primary);">
+        <i class="fa-solid fa-shield-check"></i> Document Guidelines
+    </h3>
+    <ul style="margin: 0; padding-left: var(--space-5); color: var(--text-secondary); font-size: 0.8125rem; line-height: 1.7;">
+        <li>Ensure all documents are clear and readable</li>
+        <li>File names should not contain special characters</li>
+        <li>Photos should be in passport size format</li>
+        <li>Resume should be updated and in PDF format</li>
+        <li>All documents will be kept confidential</li>
+        <li>You can update documents anytime from your dashboard</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Photo preview
+    $('#photo').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Photo size should be less than 2MB');
+                $(this).val('');
+                return;
+            }
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#photo-preview-img').attr('src', e.target.result);
+                $('#photo-preview').show();
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Resume file info
+    $('#resume').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Resume size should be less than 5MB');
+                $(this).val('');
+                return;
+            }
+            
+            // Validate PDF
+            if (file.type !== 'application/pdf') {
+                alert('Resume must be a PDF file');
+                $(this).val('');
+                return;
+            }
+            
+            // Show file info
+            $('#resume-name').text(file.name);
+            $('#resume-info').show();
+        }
+    });
+    
+    // ID proof file info
+    $('#id_proof').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('ID proof size should be less than 2MB');
+                $(this).val('');
+                return;
+            }
+            
+            // Show file info
+            $('#id-name').text(file.name);
+            $('#id-info').show();
+        }
+    });
+    
+    // Marksheet file info
+    $('#marksheet').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Certificate size should be less than 5MB');
+                $(this).val('');
+                return;
+            }
+            
+            // Validate PDF
+            if (file.type !== 'application/pdf') {
+                alert('Certificates must be in PDF format');
+                $(this).val('');
+                return;
+            }
+            
+            // Show file info
+            $('#cert-name').text(file.name);
+            $('#cert-info').show();
+        }
+    });
+});
+</script>
+{% endblock %}

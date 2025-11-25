@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Review Your Profile{% endblock %}
+
+{% block content %}
+<!-- Header Card -->
+<div class="card fade-in" style="text-align: center; background: var(--primary-light); border-color: var(--primary);">
+    <div style="width: 60px; height: 60px; margin: 0 auto var(--space-3); background: var(--primary); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center;">
+        <i class="fa-solid fa-clipboard-check" style="font-size: 1.75rem; color: white;"></i>
+    </div>
+    <h1 style="color: var(--primary); font-size: 1.75rem;">Review Your Profile</h1>
+    <p style="color: var(--text-primary); margin-bottom: 0;">Please verify all information before submitting</p>
+</div>
+
+<!-- Basic Information -->
+<div class="card fade-in" style="animation-delay: 0.1s;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+        <h3 style="margin: 0; font-size: 1.125rem;">
+            <i class="fa-solid fa-user" style="color: var(--primary); margin-right: var(--space-2);"></i>
+            Basic Information
+        </h3>
+        <a href="{% url 'profile_step' step=1 %}" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-edit"></i>
+        </a>
+    </div>
+    
+    <div class="review-section">
+        <div class="review-item">
+            <span class="review-label">Full Name</span>
+            <span class="review-value">{{ profile.full_name }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Gender</span>
+            <span class="review-value">{{ profile.gender|capfirst }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Date of Birth</span>
+            <span class="review-value">{{ profile.date_of_birth|date:"F d, Y" }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Location</span>
+            <span class="review-value">{{ profile.current_city }}, {{ profile.current_state }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Languages</span>
+            <span class="review-value">{{ profile.preferred_languages|join:", " }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Education -->
+<div class="card fade-in" style="animation-delay: 0.2s;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+        <h3 style="margin: 0; font-size: 1.125rem;">
+            <i class="fa-solid fa-graduation-cap" style="color: var(--primary); margin-right: var(--space-2);"></i>
+            Education
+        </h3>
+        <a href="{% url 'profile_step' step=2 %}" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-edit"></i>
+        </a>
+    </div>
+    
+    <div class="review-section">
+        <div class="review-item">
+            <span class="review-label">Status</span>
+            <span class="review-value">{{ profile.current_status|capfirst }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Qualification</span>
+            <span class="review-value">{{ profile.highest_qualification }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Stream</span>
+            <span class="review-value">{{ profile.stream_specialization }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">College</span>
+            <span class="review-value">{{ profile.college_name }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">University</span>
+            <span class="review-value">{{ profile.university }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Graduation Year</span>
+            <span class="review-value">{{ profile.graduation_year }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Academic Score</span>
+            <span class="review-value">{{ profile.academic_scores }}</span>
+        </div>
+        {% if profile.has_backlogs %}
+        <div class="review-item">
+            <span class="review-label">Backlogs</span>
+            <span class="review-value">{{ profile.num_backlogs }}</span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Career Preferences -->
+<div class="card fade-in" style="animation-delay: 0.3s;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+        <h3 style="margin: 0; font-size: 1.125rem;">
+            <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: var(--space-2);"></i>
+            Career Preferences
+        </h3>
+        <a href="{% url 'profile_step' step=4 %}" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-edit"></i>
+        </a>
+    </div>
+    
+    <div class="review-section">
+        <div class="review-item">
+            <span class="review-label">Work Type</span>
+            <span class="review-value">{{ profile.work_type|capfirst }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Expected Salary</span>
+            <span class="review-value">{{ profile.expected_salary }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Willing to Relocate</span>
+            <span class="review-value">
+                {% if profile.willing_to_relocate %}
+                    <i class="fa-solid fa-check" style="color: var(--success);"></i> Yes
+                {% else %}
+                    <i class="fa-solid fa-times" style="color: var(--error);"></i> No
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Availability -->
+<div class="card fade-in" style="animation-delay: 0.4s;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+        <h3 style="margin: 0; font-size: 1.125rem;">
+            <i class="fa-solid fa-clock" style="color: var(--primary); margin-right: var(--space-2);"></i>
+            Availability & Setup
+        </h3>
+        <a href="{% url 'profile_step' step=5 %}" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-edit"></i>
+        </a>
+    </div>
+    
+    <div class="review-section">
+        <div class="review-item">
+            <span class="review-label">Training Time</span>
+            <span class="review-value">{{ profile.time_for_training|capfirst }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Internet Quality</span>
+            <span class="review-value">{{ profile.internet_quality|capfirst }}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-label">Device Access</span>
+            <span class="review-value">
+                {% if profile.has_mobile_access %}<i class="fa-solid fa-mobile-screen"></i> Mobile {% endif %}
+                {% if profile.has_laptop_access %}<i class="fa-solid fa-laptop"></i> Laptop{% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation & Submit -->
+<div class="card fade-in" style="animation-delay: 0.5s; background: var(--gray-50);">
+    <div style="display: flex; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-5);">
+        <i class="fa-solid fa-info-circle" style="color: var(--info); font-size: 1.25rem; flex-shrink: 0; margin-top: 2px;"></i>
+        <div>
+            <p style="color: var(--text-primary); margin-bottom: var(--space-2); font-weight: 500;">
+                By submitting this profile, you confirm that:
+            </p>
+            <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); font-size: 0.875rem;">
+                <li style="padding: var(--space-1) 0;">✓ All information provided is accurate and truthful</li>
+                <li style="padding: var(--space-1) 0;">✓ You agree to our Terms of Service and Privacy Policy</li>
+                <li style="padding: var(--space-1) 0;">✓ You're committed to completing the training program</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="btn-group">
+        <a href="{% url 'profile_step' step=7 %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+        <button id="submit-btn" class="btn btn-primary" style="flex: 1;">
+            <i class="fa-solid fa-paper-plane"></i>
+            Submit Profile
+        </button>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    const $submitBtn = $('#submit-btn');
+    
+    $submitBtn.on('click', function() {
+        // Confirm submission
+        if (!confirm('Are you sure you want to submit your profile? You can still edit it later if needed.')) {
+            return;
+        }
+        
+        // Disable button and show loading
+        const originalHtml = $submitBtn.html();
+        $submitBtn.prop('disabled', true).html('<div class="spinner"></div> Submitting...');
+        
+        // Submit via AJAX
+        $.ajax({
+            url: '{% url "profile_submit" %}',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Show success state
+                    $submitBtn.html('<i class="fa-solid fa-check-circle"></i> Submitted!');
+                    
+                    // Redirect after brief delay
+                    setTimeout(() => {
+                        window.location.href = response.redirect;
+                    }, 500);
+                } else {
+                    // Show error
+                    alert(response.message || 'Submission failed. Please try again.');
+                    $submitBtn.prop('disabled', false).html(originalHtml);
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON || {};
+                alert(response.message || 'An error occurred. Please try again.');
+                $submitBtn.prop('disabled', false).html(originalHtml);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

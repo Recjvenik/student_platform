@@ -1,0 +1,213 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-briefcase{% endblock %}
+{% block step_title %}Career Preferences{% endblock %}
+{% block step_description %}Share your career goals and preferences{% endblock %}
+
+{% block form_content %}
+<div class="form-group">
+    <label for="work_type" class="required">Preferred Work Type</label>
+    <select id="work_type" name="work_type" required>
+        <option value="">Select your preference</option>
+        <option value="remote" {% if form.work_type.value == 'remote' %}selected{% endif %}>🏠 Remote (Work from home)</option>
+        <option value="office" {% if form.work_type.value == 'office' %}selected{% endif %}>🏢 Office (On-site)</option>
+        <option value="hybrid" {% if form.work_type.value == 'hybrid' %}selected{% endif %}>🔄 Hybrid (Mix of both)</option>
+        <option value="any" {% if form.work_type.value == 'any' %}selected{% endif %}>✨ Any (Flexible)</option>
+    </select>
+    {% if form.work_type.errors %}
+        <span class="error-message">{{ form.work_type.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="expected_salary" class="required">Expected Salary Range (Annual)</label>
+    <select id="expected_salary" name="expected_salary" required>
+        <option value="">Select salary range</option>
+        <option value="0-3 LPA" {% if form.expected_salary.value == '0-3 LPA' %}selected{% endif %}>₹0 - 3 LPA</option>
+        <option value="3-5 LPA" {% if form.expected_salary.value == '3-5 LPA' %}selected{% endif %}>₹3 - 5 LPA</option>
+        <option value="5-8 LPA" {% if form.expected_salary.value == '5-8 LPA' %}selected{% endif %}>₹5 - 8 LPA</option>
+        <option value="8-12 LPA" {% if form.expected_salary.value == '8-12 LPA' %}selected{% endif %}>₹8 - 12 LPA</option>
+        <option value="12+ LPA" {% if form.expected_salary.value == '12+ LPA' %}selected{% endif %}>₹12+ LPA</option>
+    </select>
+    {% if form.expected_salary.errors %}
+        <span class="error-message">{{ form.expected_salary.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label>Willing to Relocate for Job?</label>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="relocate_yes" name="willing_to_relocate" value="true" 
+                   {% if form.willing_to_relocate.value %}checked{% endif %}>
+            <label for="relocate_yes">
+                <i class="fa-solid fa-check-circle"></i> Yes, I'm open to relocation
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="relocate_no" name="willing_to_relocate" value="false" 
+                   {% if form.willing_to_relocate.value == False %}checked{% endif %}>
+            <label for="relocate_no">
+                <i class="fa-solid fa-times-circle"></i> No, I prefer my current city
+            </label>
+        </div>
+    </div>
+    {% if form.willing_to_relocate.errors %}
+        <span class="error-message">{{ form.willing_to_relocate.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label class="required">Preferred Job Roles</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select roles you're interested in (select at least one)
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_sales" name="role_sales" 
+                   {% if form.role_sales.value %}checked{% endif %}>
+            <label for="role_sales">
+                <i class="fa-solid fa-chart-line"></i> Sales / Business Development
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_customer_support" name="role_customer_support" 
+                   {% if form.role_customer_support.value %}checked{% endif %}>
+            <label for="role_customer_support">
+                <i class="fa-solid fa-headset"></i> Customer Support
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_marketing" name="role_marketing" 
+                   {% if form.role_marketing.value %}checked{% endif %}>
+            <label for="role_marketing">
+                <i class="fa-solid fa-bullhorn"></i> Marketing / Digital Marketing
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_hr" name="role_hr" 
+                   {% if form.role_hr.value %}checked{% endif %}>
+            <label for="role_hr">
+                <i class="fa-solid fa-users"></i> Human Resources
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_content" name="role_content" 
+                   {% if form.role_content.value %}checked{% endif %}>
+            <label for="role_content">
+                <i class="fa-solid fa-pen"></i> Content Writing
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_software_developer" name="role_software_developer" 
+                   {% if form.role_software_developer.value %}checked{% endif %}>
+            <label for="role_software_developer">
+                <i class="fa-solid fa-code"></i> Software Developer
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_data_analyst" name="role_data_analyst" 
+                   {% if form.role_data_analyst.value %}checked{% endif %}>
+            <label for="role_data_analyst">
+                <i class="fa-solid fa-chart-bar"></i> Data Analyst
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="role_operations" name="role_operations" 
+                   {% if form.role_operations.value %}checked{% endif %}>
+            <label for="role_operations">
+                <i class="fa-solid fa-gears"></i> Operations / Admin
+            </label>
+        </div>
+    </div>
+    {% if form.errors %}
+        {% with show_error=False %}
+            {% for field, errors in form.errors.items %}
+                {% if 'role_' in field or field == '__all__' %}
+                    {% with show_error=True %}{% endwith %}
+                {% endif %}
+            {% endfor %}
+
+            {% if show_error %}
+                <span class="error-message">Please select at least one preferred job role</span>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label>Preferred Industries</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select industries you'd like to work in (optional)
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="industry_it_software" name="industry_it_software" 
+                   {% if form.industry_it_software.value %}checked{% endif %}>
+            <label for="industry_it_software">
+                <i class="fa-solid fa-laptop"></i> IT / Software
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="industry_ecommerce" name="industry_ecommerce" 
+                   {% if form.industry_ecommerce.value %}checked{% endif %}>
+            <label for="industry_ecommerce">
+                <i class="fa-solid fa-cart-shopping"></i> E-commerce
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="industry_fintech" name="industry_fintech" 
+                   {% if form.industry_fintech.value %}checked{% endif %}>
+            <label for="industry_fintech">
+                <i class="fa-solid fa-coins"></i> Fintech / Banking
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="industry_edtech" name="industry_edtech" 
+                   {% if form.industry_edtech.value %}checked{% endif %}>
+            <label for="industry_edtech">
+                <i class="fa-solid fa-graduation-cap"></i> EdTech / Education
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="industry_healthcare" name="industry_healthcare" 
+                   {% if form.industry_healthcare.value %}checked{% endif %}>
+            <label for="industry_healthcare">
+                <i class="fa-solid fa-heart-pulse"></i> Healthcare
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="industry_consulting" name="industry_consulting" 
+                   {% if form.industry_consulting.value %}checked{% endif %}>
+            <label for="industry_consulting">
+                <i class="fa-solid fa-user-tie"></i> Consulting
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="preferred_locations">Preferred Work Locations</label>
+    <input 
+        type="text" 
+        id="preferred_locations" 
+        name="preferred_locations"
+        value="{% if form.preferred_locations.value %}{{ form.preferred_locations.value|join:', ' }}{% endif %}" 
+        placeholder="e.g., Bangalore, Mumbai, Delhi"
+    >
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        Enter cities separated by commas
+    </p>
+    {% if form.preferred_locations.errors %}
+        <span class="error-message">{{ form.preferred_locations.errors.0 }}</span>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Optional: Add any UI interactions here
+});
+</script>
+{% endblock %}

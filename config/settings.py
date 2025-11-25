@@ -5,11 +5,16 @@ Django settings for Student Training & Job Platform POC
 from pathlib import Path
 import os
 
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4$n15n@40kv_hpwcx%r^vmp*j-^g@6uw1ey1@6c&i$_!c9nkk9'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -76,6 +81,21 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),     
+        'PASSWORD': config('DB_PASSWORD'),  
+        'HOST': config('DB_HOST'),  # Host
+        'PORT': config('DB_PORT', default=5432, cast=int),  # Default PostgreSQL port (as it's not specified in the URL)
+        'OPTIONS': {
+            'sslmode': 'require',  # SSL mode parameter
+            'channel_binding': 'require',  # Channel binding parameter
+        }
+    }
+}
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -104,6 +124,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
 
+
+
+
+# Django-allauth settings
 # Django-allauth settings
 SITE_ID = 1
 
@@ -112,14 +136,30 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Allauth settings
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# Updated Allauth settings for newer versions
+# Login methods configuration
+ACCOUNT_LOGIN_METHODS = {'email'}  # Only email login
+
+# Signup fields configuration (for social auth only, no standard signup)
+ACCOUNT_SIGNUP_FIELDS = ['email']  # Include email in signup fields
+
+# Remove these deprecated settings:
+# ACCOUNT_EMAIL_REQUIRED = False  # REMOVE THIS
+# ACCOUNT_USERNAME_REQUIRED = False  # REMOVE THIS
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # REMOVE THIS (or set to 'email' if needed)
+
+# Email configuration
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Since you're using OTP/social auth
+ACCOUNT_EMAIL_REQUIRED = True  # Keep this but set to True for social accounts
+
+# Social account settings
 SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# Redirect settings
 LOGIN_REDIRECT_URL = '/profile/start/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Google OAuth settings
 SOCIALACCOUNT_PROVIDERS = {
@@ -127,10 +167,10 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {'access_type': 'online'},
         'APP': {
-            'client_id': 'YOUR_GOOGLE_CLIENT_ID',
-            'secret': 'YOUR_GOOGLE_SECRET',
+            'client_id': config('GOOGLE_CLIENT_ID'),
+            'secret': config('GOOGLE_SECRET'),
             'key': ''
-        }
+        },
     }
 }
 
@@ -147,3 +187,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # OTP Settings
 OTP_EXPIRY_SECONDS = 90
+
+TWO_FACTOR_API_KEY = config('TWO_FACTOR_API_KEY')
+
+

@@ -1,0 +1,224 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-graduation-cap{% endblock %}
+{% block step_title %}Education Details{% endblock %}
+{% block step_description %}Tell us about your academic background{% endblock %}
+
+{% block form_content %}
+<div class="form-group">
+    <label class="required">Current Status</label>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="student" name="current_status" value="student" 
+                   {% if form.current_status.value == 'student' %}checked{% endif %} required>
+            <label for="student">
+                <i class="fa-solid fa-book"></i> Student
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="graduate" name="current_status" value="graduate" 
+                   {% if form.current_status.value == 'graduate' %}checked{% endif %}>
+            <label for="graduate">
+                <i class="fa-solid fa-user-graduate"></i> Graduate
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="postgraduate" name="current_status" value="postgraduate" 
+                   {% if form.current_status.value == 'postgraduate' %}checked{% endif %}>
+            <label for="postgraduate">
+                <i class="fa-solid fa-graduation-cap"></i> Postgraduate
+            </label>
+        </div>
+    </div>
+    {% if form.current_status.errors %}
+        <span class="error-message">{{ form.current_status.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="highest_qualification" class="required">Highest Qualification</label>
+    <select id="highest_qualification" name="highest_qualification" required>
+        <option value="">Select your qualification</option>
+        <option value="10th" {% if form.highest_qualification.value == '10th' %}selected{% endif %}>10th Standard</option>
+        <option value="12th" {% if form.highest_qualification.value == '12th' %}selected{% endif %}>12th Standard</option>
+        <option value="Diploma" {% if form.highest_qualification.value == 'Diploma' %}selected{% endif %}>Diploma</option>
+        <option value="B.Tech" {% if form.highest_qualification.value == 'B.Tech' %}selected{% endif %}>B.Tech / B.E.</option>
+        <option value="B.Sc" {% if form.highest_qualification.value == 'B.Sc' %}selected{% endif %}>B.Sc</option>
+        <option value="B.Com" {% if form.highest_qualification.value == 'B.Com' %}selected{% endif %}>B.Com</option>
+        <option value="BBA" {% if form.highest_qualification.value == 'BBA' %}selected{% endif %}>BBA</option>
+        <option value="BCA" {% if form.highest_qualification.value == 'BCA' %}selected{% endif %}>BCA</option>
+        <option value="BA" {% if form.highest_qualification.value == 'BA' %}selected{% endif %}>BA</option>
+        <option value="M.Tech" {% if form.highest_qualification.value == 'M.Tech' %}selected{% endif %}>M.Tech / M.E.</option>
+        <option value="M.Sc" {% if form.highest_qualification.value == 'M.Sc' %}selected{% endif %}>M.Sc</option>
+        <option value="MBA" {% if form.highest_qualification.value == 'MBA' %}selected{% endif %}>MBA</option>
+        <option value="MCA" {% if form.highest_qualification.value == 'MCA' %}selected{% endif %}>MCA</option>
+        <option value="MA" {% if form.highest_qualification.value == 'MA' %}selected{% endif %}>MA</option>
+    </select>
+    {% if form.highest_qualification.errors %}
+        <span class="error-message">{{ form.highest_qualification.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="stream_specialization" class="required">Stream / Specialization</label>
+    <input 
+        type="text" 
+        id="stream_specialization" 
+        name="stream_specialization"
+        value="{{ form.stream_specialization.value|default:'' }}" 
+        placeholder="e.g., Computer Science, Commerce, Arts"
+        required
+    >
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        Enter your field of study or major
+    </p>
+    {% if form.stream_specialization.errors %}
+        <span class="error-message">{{ form.stream_specialization.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="college_name" class="required">College / Institution Name</label>
+    <input 
+        type="text" 
+        id="college_name" 
+        name="college_name"
+        value="{{ form.college_name.value|default:'' }}" 
+        placeholder="Enter your college or institution name"
+        required
+    >
+    {% if form.college_name.errors %}
+        <span class="error-message">{{ form.college_name.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="university" class="required">University / Board</label>
+    <input 
+        type="text" 
+        id="university" 
+        name="university"
+        value="{{ form.university.value|default:'' }}" 
+        placeholder="e.g., Delhi University, CBSE"
+        required
+    >
+    {% if form.university.errors %}
+        <span class="error-message">{{ form.university.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="graduation_year" class="required">Year of Graduation / Passing</label>
+    <select id="graduation_year" name="graduation_year" required>
+        <option value="">Select year</option>
+        {% for year in years %}
+        <option value="{{ year }}" {% if form.graduation_year.value|stringformat:"s" == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+    </select>
+    {% if form.graduation_year.errors %}
+        <span class="error-message">{{ form.graduation_year.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="academic_scores" class="required">Academic Scores</label>
+    <input 
+        type="text" 
+        id="academic_scores" 
+        name="academic_scores"
+        value="{{ form.academic_scores.value|default:'' }}" 
+        placeholder="e.g., 8.5 CGPA or 85%"
+        required
+    >
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        Enter your CGPA or percentage
+    </p>
+    {% if form.academic_scores.errors %}
+        <span class="error-message">{{ form.academic_scores.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label>Do you have any backlogs or pending exams?</label>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="backlogs_yes" name="has_backlogs" value="true" 
+                   {% if form.has_backlogs.value %}checked{% endif %}>
+            <label for="backlogs_yes">
+                <i class="fa-solid fa-circle-check"></i> Yes
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="backlogs_no" name="has_backlogs" value="false" 
+                   {% if form.has_backlogs.value == False %}checked{% endif %}>
+            <label for="backlogs_no">
+                <i class="fa-solid fa-circle-xmark"></i> No
+            </label>
+        </div>
+    </div>
+    {% if form.has_backlogs.errors %}
+        <span class="error-message">{{ form.has_backlogs.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group" id="backlogs_count_group" style="display: {% if form.has_backlogs.value %}block{% else %}none{% endif %};">
+    <label for="num_backlogs">Number of Backlogs</label>
+    <input 
+        type="number" 
+        id="num_backlogs" 
+        name="num_backlogs"
+        value="{{ form.num_backlogs.value|default:'0' }}" 
+        min="0"
+        max="20"
+        placeholder="Enter number"
+    >
+    {% if form.num_backlogs.errors %}
+        <span class="error-message">{{ form.num_backlogs.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label>Work Experience/Internships (Optional)</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.875rem;">
+        Any relevant work experience or internships
+    </p>
+    <div id="experiences-container">
+        {% for experience in experiences %}
+        <div class="experience-item" style="padding: var(--space-4); background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: var(--space-3);">
+            <h4 style="margin-bottom: var(--space-2); font-size: 1rem;">{{ experience.role }} at {{ experience.company_name }}</h4>
+            <p style="margin-bottom: var(--space-1); font-size: 0.875rem; color: var(--text-muted);">Duration: {{ experience.duration }}</p>
+            <p style="margin-bottom: 0; font-size: 0.875rem;">{{ experience.description }}</p>
+        </div>
+        {% empty %}
+        <p class="text-muted" style="font-size: 0.875rem; font-style: italic;">
+            No work experience added yet
+        </p>
+        {% endfor %}
+    </div>
+    <p class="text-muted" style="font-size: 0.875rem; margin-top: var(--space-2);">
+        Note: Experience management will be added in a future update
+    </p>
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Show/hide backlogs count field
+    $('input[name=has_backlogs]').on('change', function() {
+        if ($(this).val() === 'true') {
+            $('#backlogs_count_group').slideDown(200);
+            $('#num_backlogs').prop('required', true);
+        } else {
+            $('#backlogs_count_group').slideUp(200);
+            $('#num_backlogs').prop('required', false).val('0');
+        }
+    });
+    
+    // Initialize visibility on page load
+    if ($('input[name=has_backlogs]:checked').val() === 'true') {
+        $('#backlogs_count_group').show();
+    }
+});
+</script>
+{% endblock %}

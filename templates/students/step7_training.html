@@ -1,0 +1,129 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-chalkboard-user{% endblock %}
+{% block step_title %}Training Program Details{% endblock %}
+{% block step_description %}Share your training preferences and commitment{% endblock %}
+
+{% block form_content %}
+<div class="form-group">
+    <label for="discovery_source" class="required">How did you hear about us?</label>
+    <select id="discovery_source" name="discovery_source" required>
+        <option value="">Select source</option>
+        <option value="Social Media" {% if form.discovery_source.value == 'Social Media' %}selected{% endif %}>📱 Social Media (Facebook, Instagram, LinkedIn)</option>
+        <option value="Google Search" {% if form.discovery_source.value == 'Google Search' %}selected{% endif %}>🔍 Google Search</option>
+        <option value="Friend Referral" {% if form.discovery_source.value == 'Friend Referral' %}selected{% endif %}>👥 Friend or Family Referral</option>
+        <option value="College/University" {% if form.discovery_source.value == 'College/University' %}selected{% endif %}>🎓 College or University</option>
+        <option value="Job Portal" {% if form.discovery_source.value == 'Job Portal' %}selected{% endif %}>💼 Job Portal (Naukri, Indeed, etc.)</option>
+        <option value="WhatsApp" {% if form.discovery_source.value == 'WhatsApp' %}selected{% endif %}>💬 WhatsApp</option>
+        <option value="Advertisement" {% if form.discovery_source.value == 'Advertisement' %}selected{% endif %}>📺 Advertisement</option>
+        <option value="Other" {% if form.discovery_source.value == 'Other' %}selected{% endif %}>✨ Other</option>
+    </select>
+    {% if form.discovery_source.errors %}
+        <span class="error-message">{{ form.discovery_source.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="previous_training">Have you completed any training programs before?</label>
+    <textarea 
+        id="previous_training" 
+        name="previous_training"
+        rows="3"
+        placeholder="Describe any previous training programs you've completed (or write 'None' if this is your first)"
+    >{{ form.previous_training.value|default:'' }}</textarea>
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        Include the name, duration, and what you learned
+    </p>
+    {% if form.previous_training.errors %}
+        <span class="error-message">{{ form.previous_training.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label for="fee_preference" class="required">Training Fee Preference</label>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input type="radio" id="fee_upfront" name="fee_preference" value="upfront" 
+                   {% if form.fee_preference.value == 'upfront' %}checked{% endif %} required>
+            <label for="fee_upfront">
+                <i class="fa-solid fa-wallet"></i>
+                <div>
+                    <strong>Pay Upfront</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">Pay full amount before training</div>
+                </div>
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="fee_emi" name="fee_preference" value="emi" 
+                   {% if form.fee_preference.value == 'emi' %}checked{% endif %}>
+            <label for="fee_emi">
+                <i class="fa-solid fa-credit-card"></i>
+                <div>
+                    <strong>EMI / Installments</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">Pay in monthly installments</div>
+                </div>
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="fee_free" name="fee_preference" value="free" 
+                   {% if form.fee_preference.value == 'free' %}checked{% endif %}>
+            <label for="fee_free">
+                <i class="fa-solid fa-gift"></i>
+                <div>
+                    <strong>Free Program</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">Looking for free training</div>
+                </div>
+            </label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="fee_scholarship" name="fee_preference" value="scholarship" 
+                   {% if form.fee_preference.value == 'scholarship' %}checked{% endif %}>
+            <label for="fee_scholarship">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <div>
+                    <strong>Scholarship / Financial Aid</strong>
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px;">Need financial assistance</div>
+                </div>
+            </label>
+        </div>
+    </div>
+    {% if form.fee_preference.errors %}
+        <span class="error-message">{{ form.fee_preference.errors.0 }}</span>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label class="required">Commitment Agreement</label>
+    <div style="background: var(--primary-light); padding: var(--space-4); border-radius: var(--radius-lg); border: 2px solid var(--primary); margin-bottom: var(--space-3);">
+        <p style="color: var(--text-primary); margin-bottom: var(--space-2); font-weight: 500;">
+            <i class="fa-solid fa-handshake"></i> Training Program Commitment
+        </p>
+        <ul style="margin: 0; padding-left: var(--space-5); color: var(--text-secondary); font-size: 0.875rem; line-height: 1.7;">
+            <li>I will attend all training sessions regularly</li>
+            <li>I will complete all assignments and assessments</li>
+            <li>I will maintain professional conduct during training</li>
+            <li>I understand that serious commitment is required for success</li>
+            <li>I will inform in advance if I need to miss any session</li>
+        </ul>
+    </div>
+    
+    <div class="checkbox-option" style="border: 2px solid var(--primary);">
+        <input type="checkbox" id="commitment_confirmed" name="commitment_confirmed" 
+               {% if form.commitment_confirmed.value %}checked{% endif %} required>
+        <label for="commitment_confirmed" style="font-weight: 600; color: var(--primary);">
+            <i class="fa-solid fa-check-circle"></i> I agree to commit fully to the training program
+        </label>
+    </div>
+    {% if form.commitment_confirmed.errors %}
+        <span class="error-message">{{ form.commitment_confirmed.errors.0 }}</span>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Optional: Add any UI interactions here
+});
+</script>
+{% endblock %}

@@ -1,47 +1,158 @@
 {% extends "base.html" %}
+{% load socialaccount %}
 
-{% block title %}Welcome - Career Launchpad{% endblock %}
+{% block title %}Welcome - CareerLaunch{% endblock %}
 
 {% block content %}
-<div class="hero" style="text-align: center; margin-bottom: 30px;">
-    <h1 style="margin-bottom: 8px;">Launch Your Career</h1>
-    <p style="font-size: 16px;">Master new skills and connect with top employers.</p>
+
+{% if user.is_authenticated %}
+<!-- Authenticated User View -->
+<div class="hero" style="padding: var(--space-8) 0 var(--space-6);">
+    <div style="width: 80px; height: 80px; margin: 0 auto var(--space-4); background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center;">
+        <i class="fa-solid fa-user-check" style="font-size: 2.5rem; color: white;"></i>
+    </div>
+    <h1 style="margin-bottom: var(--space-2);">Welcome Back!</h1>
+    <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0;">
+        {% if user.first_name %}
+            Hi {{ user.first_name }}, ready to continue your journey?
+        {% else %}
+            Ready to continue your journey?
+        {% endif %}
+    </p>
 </div>
 
-<div class="card">
-    <h2>Get Started</h2>
-    <p>Create your profile to access exclusive training.</p>
+<div class="card fade-in">
+    <h2 style="font-size: 1.25rem; margin-bottom: var(--space-4);">
+        <i class="fa-solid fa-rocket" style="color: var(--primary);"></i>
+        Quick Actions
+    </h2>
     
-    <div class="auth-options">
-        <a href="{% url 'mobile_login' %}" class="btn btn-primary btn-block">
-            <i class="fa-solid fa-mobile-screen"></i> Sign in with Mobile
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-block btn-lg">
+            <i class="fa-solid fa-th-large"></i>
+            Go to Dashboard
         </a>
-        <a href="{% url 'account_login' %}" class="btn btn-secondary btn-block">
-            <i class="fab fa-google"></i> Sign in with Google
+        
+        <a href="{% url 'profile_start' %}" class="btn btn-secondary btn-block btn-lg">
+            <i class="fa-solid fa-user-edit"></i>
+            Update Profile
         </a>
     </div>
 </div>
 
-<div class="card" style="border: none; box-shadow: none; background: transparent; padding: 0;">
-    <h3 style="font-size: 16px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-size: 12px; font-weight: 700;">Why Join Us?</h3>
+<div class="card" style="background: var(--primary-light); border-color: var(--primary-light);">
+    <div style="text-align: center;">
+        <i class="fa-solid fa-lightbulb" style="font-size: 2rem; color: var(--primary); margin-bottom: var(--space-3);"></i>
+        <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: var(--space-2);">
+            Your Progress
+        </h3>
+        <p style="color: var(--text-secondary); margin-bottom: 0; font-size: 0.875rem;">
+            Keep building your profile to unlock training opportunities
+        </p>
+    </div>
+</div>
+
+{% else %}
+<!-- Non-authenticated User View -->
+<div class="hero" style="padding: var(--space-10) 0 var(--space-6);">
+    <div style="width: 80px; height: 80px; margin: 0 auto var(--space-4); background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(79, 70, 229, 0.2);">
+        <i class="fa-solid fa-rocket" style="font-size: 2.5rem; color: white;"></i>
+    </div>
+    <h1 style="margin-bottom: var(--space-2);">Launch Your Career</h1>
+    <p style="font-size: 1rem; color: var(--text-secondary);">
+        Master new skills and connect with top employers
+    </p>
+</div>
+
+<div class="card fade-in">
+    <div class="card-header" style="margin-bottom: var(--space-5);">
+        <h2 style="font-size: 1.25rem; margin-bottom: var(--space-2);">Get Started Today</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 0; font-size: 0.9375rem;">
+            Choose your preferred sign-in method
+        </p>
+    </div>
+    
+    <div class="auth-options">
+        <a href="{% provider_login_url 'google' %}" class="btn btn-secondary btn-block btn-lg">
+            <i class="fab fa-google" style="color: #DB4437;"></i>
+            Continue with Google
+        </a>
+        
+        <div class="divider">
+            <span>or</span>
+        </div>
+        
+        <a href="{% url 'mobile_login' %}" class="btn btn-primary btn-block btn-lg">
+            <i class="fa-solid fa-mobile-screen"></i>
+            Sign in with Mobile Number
+        </a>
+    </div>
+    
+    <div style="margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-muted); font-size: 0.8125rem; margin-bottom: 0;">
+            <i class="fa-solid fa-shield-halved"></i> Secure • Fast • No Password Required
+        </p>
+    </div>
+</div>
+
+<!-- Benefits Section -->
+<div style="margin-top: var(--space-8);">
+    <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: var(--space-4); font-weight: 700; text-align: center;">
+        Why Choose CareerLaunch?
+    </h3>
     
     <div class="features-grid">
         <div class="feature-item">
             <i class="fa-solid fa-graduation-cap"></i>
             <span>Free industry-standard training</span>
         </div>
+        
         <div class="feature-item">
             <i class="fa-solid fa-briefcase"></i>
             <span>Direct job placement assistance</span>
         </div>
+        
         <div class="feature-item">
             <i class="fa-solid fa-certificate"></i>
             <span>Verified skill certifications</span>
         </div>
+        
         <div class="feature-item">
             <i class="fa-solid fa-building"></i>
             <span>Network with top companies</span>
         </div>
     </div>
 </div>
+
+<!-- Stats Section -->
+<div class="card" style="margin-top: var(--space-8); background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; color: white;">
+    <div style="text-align: center;">
+        <h3 style="color: white; margin-bottom: var(--space-4); font-size: 1.125rem;">
+            Join Thousands of Students
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+            <div>
+                <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-1);">5K+</div>
+                <div style="font-size: 0.75rem; opacity: 0.9;">Students</div>
+            </div>
+            <div>
+                <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-1);">50+</div>
+                <div style="font-size: 0.75rem; opacity: 0.9;">Companies</div>
+            </div>
+            <div>
+                <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-1);">95%</div>
+                <div style="font-size: 0.75rem; opacity: 0.9;">Success Rate</div>
+            </div>
+        </div>
+        
+        <a href="{% url 'login' %}" class="btn btn-block" style="background: white; color: var(--primary); border-color: white;">
+            <i class="fa-solid fa-arrow-right"></i>
+            Start Your Journey
+        </a>
+    </div>
+</div>
+
+{% endif %}
+
 {% endblock %}

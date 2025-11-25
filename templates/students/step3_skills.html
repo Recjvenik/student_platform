@@ -1,0 +1,185 @@
+{% extends "students/step_base.html" %}
+
+{% block step_icon %}fa-solid fa-laptop-code{% endblock %}
+{% block step_title %}Skills & Exposure{% endblock %}
+{% block step_description %}Help us understand your technical capabilities{% endblock %}
+
+{% block form_content %}
+<div class="form-group">
+    <label class="required">English Proficiency</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Rate yourself on a scale of 1-5 (1 = Basic, 5 = Excellent)
+    </p>
+    
+    <div style="margin-bottom: var(--space-4);">
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">Speaking</label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="english_speaking" value="{{ i }}" id="speak_{{ i }}" 
+                   {% if form.english_speaking.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="speak_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.english_speaking.errors %}
+            <span class="error-message">{{ form.english_speaking.errors.0 }}</span>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: var(--space-4);">
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">Reading</label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="english_reading" value="{{ i }}" id="read_{{ i }}" 
+                   {% if form.english_reading.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="read_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.english_reading.errors %}
+            <span class="error-message">{{ form.english_reading.errors.0 }}</span>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label style="font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2);">Writing</label>
+        <div class="rating-scale">
+            {% for i in "12345" %}
+            <input type="radio" name="english_writing" value="{{ i }}" id="write_{{ i }}" 
+                   {% if form.english_writing.value|stringformat:"s" == i %}checked{% endif %} required>
+            <label for="write_{{ i }}">{{ i }}</label>
+            {% endfor %}
+        </div>
+        {% if form.english_writing.errors %}
+            <span class="error-message">{{ form.english_writing.errors.0 }}</span>
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="required">Computer Skills</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select all that you are familiar with
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="skill_ms_office" name="skill_ms_office" 
+                   {% if form.skill_ms_office.value %}checked{% endif %}>
+            <label for="skill_ms_office">
+                <i class="fa-brands fa-microsoft"></i> MS Office (Word, Excel, PowerPoint)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="skill_google_sheets" name="skill_google_sheets" 
+                   {% if form.skill_google_sheets.value %}checked{% endif %}>
+            <label for="skill_google_sheets">
+                <i class="fa-brands fa-google"></i> Google Suite (Docs, Sheets, Slides)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="skill_email" name="skill_email" 
+                   {% if form.skill_email.value %}checked{% endif %}>
+            <label for="skill_email">
+                <i class="fa-solid fa-envelope"></i> Email Communication
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="skill_internet" name="skill_internet" 
+                   {% if form.skill_internet.value %}checked{% endif %}>
+            <label for="skill_internet">
+                <i class="fa-solid fa-globe"></i> Internet Browsing & Research
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="skill_social_media" name="skill_social_media" 
+                   {% if form.skill_social_media.value %}checked{% endif %}>
+            <label for="skill_social_media">
+                <i class="fa-solid fa-share-nodes"></i> Social Media
+            </label>
+        </div>
+    </div>
+    {% if form.errors %}
+        {% with show_skill_error=False %}
+            {% for field, errors in form.errors.items %}
+                {% if 'skill_' in field or field == '__all__' %}
+                    {% with show_skill_error=True %}{% endwith %}
+                {% endif %}
+            {% endfor %}
+
+            {% if show_skill_error %}
+                <span class="error-message">Please select at least one computer skill</span>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <label>Tools & Software Exposure</label>
+    <p class="text-muted" style="margin-bottom: var(--space-3); font-size: 0.8125rem;">
+        Select tools you have used before (optional)
+    </p>
+    <div class="checkbox-group">
+        <div class="checkbox-option">
+            <input type="checkbox" id="tool_excel" name="tool_excel" 
+                   {% if form.tool_excel.value %}checked{% endif %}>
+            <label for="tool_excel">
+                <i class="fa-solid fa-table"></i> MS Excel / Google Sheets
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="tool_crm" name="tool_crm" 
+                   {% if form.tool_crm.value %}checked{% endif %}>
+            <label for="tool_crm">
+                <i class="fa-solid fa-users-gear"></i> CRM Software (Salesforce, Zoho, etc.)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="tool_design" name="tool_design" 
+                   {% if form.tool_design.value %}checked{% endif %}>
+            <label for="tool_design">
+                <i class="fa-solid fa-palette"></i> Design Tools (Canva, Photoshop, etc.)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="tool_video" name="tool_video" 
+                   {% if form.tool_video.value %}checked{% endif %}>
+            <label for="tool_video">
+                <i class="fa-solid fa-video"></i> Video Conferencing (Zoom, Teams, Meet)
+            </label>
+        </div>
+        <div class="checkbox-option">
+            <input type="checkbox" id="tool_programming" name="tool_programming" 
+                   {% if form.tool_programming.value %}checked{% endif %}>
+            <label for="tool_programming">
+                <i class="fa-solid fa-code"></i> Programming / Coding
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="typing_speed">Typing Speed (Words Per Minute)</label>
+    <input 
+        type="number" 
+        id="typing_speed" 
+        name="typing_speed"
+        value="{{ form.typing_speed.value|default:'0' }}" 
+        min="0"
+        max="200"
+        placeholder="e.g., 40"
+    >
+    <p class="text-muted" style="margin-top: var(--space-2); margin-bottom: 0; font-size: 0.8125rem;">
+        <i class="fa-solid fa-keyboard"></i> If you don't know, you can test at <a href="https://www.typing.com/student/typing-test" target="_blank" style="color: var(--primary);">typing.com</a>
+    </p>
+    {% if form.typing_speed.errors %}
+        <span class="error-message">{{ form.typing_speed.errors.0 }}</span>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block step_script %}
+<script>
+$(document).ready(function() {
+    // Optional: Add any UI interactions here
+    // Note: Form submission and validation is now handled by Django
+});
+</script>
+{% endblock %}

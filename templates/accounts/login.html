@@ -1,34 +1,117 @@
 {% extends "base.html" %}
+{% load socialaccount %}
 
-{% block title %}Sign In - Career Launchpad{% endblock %}
+{% block title %}Sign In - CareerLaunch{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div style="text-align: center; margin-bottom: 24px;">
+<div class="card fade-in">
+    <div class="card-header">
+        <div style="width: 60px; height: 60px; margin: 0 auto var(--space-4); background: linear-gradient(135deg, var(--primary-light), var(--primary-light)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-right-to-bracket" style="font-size: 1.75rem; color: var(--primary);"></i>
+        </div>
         <h1>Welcome Back</h1>
-        <p>Choose your preferred way to sign in</p>
+        <p style="margin-bottom: 0;">Choose your preferred sign-in method</p>
     </div>
     
     <div class="auth-options">
-        <a href="/accounts/google/login/" class="btn btn-secondary btn-block">
-            <i class="fab fa-google" style="color: #DB4437;"></i> Continue with Google
+        <!-- Google Sign In -->
+        <a href="{% provider_login_url 'google' %}" class="btn btn-secondary btn-block btn-lg">
+            <i class="fab fa-google" style="color: #DB4437;"></i>
+            Continue with Google
         </a>
-
-        <div style="display: flex; align-items: center; margin: 8px 0;">
-            <div style="flex-grow: 1; height: 1px; background-color: #e5e7eb;"></div>
-            <span style="padding: 0 12px; color: #9ca3af; font-size: 12px; font-weight: 500;">OR</span>
-            <div style="flex-grow: 1; height: 1px; background-color: #e5e7eb;"></div>
+        
+        <div class="divider">
+            <span>or</span>
         </div>
+        
+        <!-- Mobile Sign In -->
+        <a href="{% url 'mobile_login' %}" class="btn btn-primary btn-block btn-lg">
+            <i class="fa-solid fa-mobile-screen"></i>
+            Sign in with Mobile Number
+        </a>
+    </div>
+    
+    <!-- Additional Info -->
+    <div style="margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--border);">
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.8125rem; margin-bottom: var(--space-3);">
+            <i class="fa-solid fa-shield-halved"></i> Your data is secure and encrypted
+        </p>
+        <div style="display: flex; justify-content: center; gap: var(--space-4); font-size: 0.75rem; color: var(--text-muted);">
+            <div style="display: flex; align-items: center; gap: var(--space-1);">
+                <i class="fa-solid fa-check" style="color: var(--success);"></i>
+                <span>Fast & Easy</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-1);">
+                <i class="fa-solid fa-check" style="color: var(--success);"></i>
+                <span>No Password</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-1);">
+                <i class="fa-solid fa-check" style="color: var(--success);"></i>
+                <span>100% Secure</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <a href="{% url 'mobile_login' %}" class="btn btn-primary btn-block">
-            <i class="fa-solid fa-mobile-screen"></i> Sign in with Mobile Number
+<!-- New User Section -->
+<div class="card" style="background: var(--primary-light); border-color: var(--primary);">
+    <div style="text-align: center;">
+        <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: var(--space-2);">
+            <i class="fa-solid fa-user-plus"></i> New to CareerLaunch?
+        </h3>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-4); font-size: 0.875rem;">
+            Join thousands of students advancing their careers
+        </p>
+        <a href="{% url 'home' %}" class="btn btn-outline">
+            <i class="fa-solid fa-rocket"></i>
+            Get Started
         </a>
     </div>
 </div>
 
+<!-- Back Link -->
 <div style="text-align: center;">
     <a href="{% url 'home' %}" class="link-back">
         <i class="fa-solid fa-arrow-left"></i> Back to Home
     </a>
+</div>
+
+<!-- Benefits Section -->
+<div style="margin-top: var(--space-8); text-align: center;">
+    <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: var(--space-4); font-weight: 700;">
+        Why Sign In?
+    </h3>
+    
+    <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-3);">
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: white; border-radius: var(--radius); border: 1px solid var(--border);">
+            <div style="width: 36px; height: 36px; background: var(--primary-light); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fa-solid fa-bookmark" style="color: var(--primary);"></i>
+            </div>
+            <div style="text-align: left;">
+                <div style="font-weight: 500; color: var(--text-primary); font-size: 0.875rem;">Save Your Progress</div>
+                <div style="color: var(--text-muted); font-size: 0.75rem;">Continue where you left off</div>
+            </div>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: white; border-radius: var(--radius); border: 1px solid var(--border);">
+            <div style="width: 36px; height: 36px; background: var(--accent); opacity: 0.1; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fa-solid fa-chart-line" style="color: var(--accent);"></i>
+            </div>
+            <div style="text-align: left;">
+                <div style="font-weight: 500; color: var(--text-primary); font-size: 0.875rem;">Track Your Application</div>
+                <div style="color: var(--text-muted); font-size: 0.75rem;">Monitor your training status</div>
+            </div>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: white; border-radius: var(--radius); border: 1px solid var(--border);">
+            <div style="width: 36px; height: 36px; background: var(--success); opacity: 0.1; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fa-solid fa-bell" style="color: var(--success);"></i>
+            </div>
+            <div style="text-align: left;">
+                <div style="font-weight: 500; color: var(--text-primary); font-size: 0.875rem;">Get Notifications</div>
+                <div style="color: var(--text-muted); font-size: 0.75rem;">Stay updated on opportunities</div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

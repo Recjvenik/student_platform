@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}Step {{ step }} of {{ total_steps }} - Profile Registration{% endblock %}
+
+{% block content %}
+<!-- Progress Indicator -->
+<div class="progress-container fade-in">
+    <div class="progress-text">
+        <span style="font-weight: 700; color: var(--primary);">Step {{ step }}</span>
+        <span style="color: var(--text-muted);">of {{ total_steps }}</span>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {% widthratio step total_steps 100 %}%"></div>
+    </div>
+</div>
+
+<!-- Form Card -->
+<div class="card fade-in" style="animation-delay: 0.1s;">
+    <div class="card-header">
+        <div style="width: 48px; height: 48px; margin: 0 auto var(--space-3); background: var(--primary-light); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+            <i class="{% block step_icon %}fa-solid fa-user{% endblock %}" style="font-size: 1.25rem; color: var(--primary);"></i>
+        </div>
+        <h1 style="font-size: 1.75rem;">{% block step_title %}Profile Registration{% endblock %}</h1>
+        <p style="margin-bottom: 0;">{% block step_description %}Fill in your details{% endblock %}</p>
+    </div>
+    
+    <div class="card-body">
+        <!-- Django Form Error Messages -->
+        {% if form.non_field_errors %}
+        <div class="alert alert-error" style="margin-bottom: var(--space-4);">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{{ form.non_field_errors.0 }}</span>
+        </div>
+        {% endif %}
+        
+        <!-- Success Messages -->
+        {% if messages %}
+        <div style="margin-bottom: var(--space-4);">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" style="text-align: center;">
+                {% if message.tags == 'error' or message.tags == 'danger' %}
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                {% elif message.tags == 'success' %}
+                <i class="fa-solid fa-check-circle"></i>
+                {% elif message.tags == 'warning' %}
+                <i class="fa-solid fa-exclamation-circle"></i>
+                {% else %}
+                <i class="fa-solid fa-info-circle"></i>
+                {% endif %}
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data" id="step-form">
+            {% csrf_token %}
+            
+            {% block form_content %}{% endblock %}
+            
+            <div class="btn-group" style="margin-top: var(--space-8);">
+                {% if step > 1 %}
+                <a href="{% url 'profile_step' step=step|add:'-1' %}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% if step < total_steps %}
+                <button type="submit" class="btn btn-primary" id="next-btn" style="flex: 1;">
+                    <span>Next</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-primary" id="submit-btn" style="flex: 1;">
+                    <span>Complete Profile</span>
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block step_script %}{% endblock %}
+
+<script>
+$(document).ready(function() {
+    const $form = $('#step-form');
+    const $submitBtn = $('#next-btn, #submit-btn');
+    
+    // Form submission with loading state
+    $form.on('submit', function(e) {
+        // Show loading state
+        const originalHtml = $submitBtn.html();
+        $submitBtn.prop('disabled', true).html('<div class="spinner"></div> Saving...');
+        
+        // Allow form to submit normally
+        // The disabled state will be cleared on page reload/redirect
+    });
+    
+    // Prevent accidental navigation when form has changes
+    let formChanged = false;
+    
+    $form.find('input, select, textarea').on('change', function() {
+        formChanged = true;
+    });
+    
+    window.addEventListener('beforeunload', function(e) {
+        if (formChanged) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        }
+    });
+    
+    // Clear the warning when form is submitted
+    $form.on('submit', function() {
+        formChanged = false;
+    });
+    
+    // Clear the warning when clicking Previous button
+    $('.btn-secondary').on('click', function() {
+        formChanged = false;
+    });
+    
+    // Auto-focus first input field
+    setTimeout(function() {
+        $form.find('input:not([type=hidden]):not([type=checkbox]):not([type=radio]):first').focus();
+    }, 300);
+});
+</script>
+
+<style>
+/* Error message styling */
+.error-message {
+    display: block;
+    color: var(--error, #dc3545);
+    font-size: 0.875rem;
+    margin-top: var(--space-2, 8px);
+    font-weight: 500;
+}
+
+/* Form field error state */
+input.error,
+select.error,
+textarea.error {
+    border-color: var(--error, #dc3545);
+}
+
+/* Spinner animation */
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Alert styles */
+.alert {
+    padding: var(--space-3, 12px) var(--space-4, 16px);
+    border-radius: var(--radius-md, 8px);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    font-weight: 500;
+}
+
+.alert-error,
+.alert-danger {
+    background: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+}
+
+.alert-success {
+    background: #efe;
+    color: #3a3;
+    border: 1px solid #cfc;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.alert-info {
+    background: #e7f3ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+}
+
+/* Fade in animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress bar styling */
+.progress-container {
+    max-width: 600px;
+    margin: 0 auto var(--space-6, 24px);
+}
+
+.progress-text {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2, 8px);
+    margin-bottom: var(--space-2, 8px);
+    font-size: 0.875rem;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--bg-secondary, #f0f0f0);
+    border-radius: var(--radius-full, 9999px);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary, #007bff);
+    border-radius: var(--radius-full, 9999px);
+    transition: width 0.3s ease;
+}
+
+/* Button group styling */
+.btn-group {
+    display: flex;
+    gap: var(--space-3, 12px);
+    align-items: center;
+}
+
+.btn {
+    padding: var(--space-3, 12px) var(--space-5, 20px);
+    border-radius: var(--radius-md, 8px);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--primary, #007bff);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark, #0056b3);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary, #f0f0f0);
+    color: var(--text, #333);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-tertiary, #e0e0e0);
+}
+
+/* Card styling */
+.card {
+    background: white;
+    border-radius: var(--radius-lg, 12px);
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0,0,0,0.1));
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.card-header {
+    padding: var(--space-6, 24px) var(--space-6, 24px) var(--space-4, 16px);
+    text-align: center;
+    border-bottom: 1px solid var(--border, #e0e0e0);
+}
+
+.card-body {
+    padding: var(--space-6, 24px);
+}
+</style>
+{% endblock %}
