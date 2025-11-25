@@ -144,13 +144,9 @@ ACCOUNT_LOGIN_METHODS = {'email'}  # Only email login
 ACCOUNT_SIGNUP_FIELDS = ['email']  # Include email in signup fields
 
 # Remove these deprecated settings:
-# ACCOUNT_EMAIL_REQUIRED = False  # REMOVE THIS
-# ACCOUNT_USERNAME_REQUIRED = False  # REMOVE THIS
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # REMOVE THIS (or set to 'email' if needed)
-
-# Email configuration
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # Since you're using OTP/social auth
-ACCOUNT_EMAIL_REQUIRED = True  # Keep this but set to True for social accounts
+ACCOUNT_EMAIL_REQUIRED = False  # REMOVE THIS
+ACCOUNT_USERNAME_REQUIRED = False  # REMOVE THIS
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # REMOVE THIS (or set to 'email' if needed)
 
 # Social account settings
 SOCIALACCOUNT_AUTO_SIGNUP = True
